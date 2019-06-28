@@ -1,3 +1,14 @@
+# RAW Studio Play V2
+
+## Installation/Setup
+
+In the project root run `cp .env.example .env.development.local` to create your own local development environment.<br>
+In `.env.development.local` edit the key `REACT_APP_DIGIPLAY_API_KEY` and add your digiplay api key.
+
+Then do your normal react install with `npm install`. You should now be good to go!
+
+# Create React App default readme
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
