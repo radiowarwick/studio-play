@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
 
 class AudioPlayPause extends Component {
     constructor(props) {
@@ -13,7 +14,12 @@ class AudioPlayPause extends Component {
 
     render() {
         return (
-            <button onClick={this.handleClick}>Play/Pause</button>
+            <Button
+                variant="contained"
+                color="primary" 
+                onClick={this.handleClick}>
+                Play/Pause
+            </Button>
         );
     }
 }
