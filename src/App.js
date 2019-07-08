@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import AudioPlayer from './components/audioPlayer';
+import Audiowall from './components/audiowall';
 
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/styles';
@@ -17,12 +18,13 @@ const StyledApp = withStyles({
 
 // Given an array of configuration objects, and a parameter string as input
 // Return the configration where it's parameter matches the search string
-const findInConfigration = (array, parameter) => 
-    array.find(element => {
+const findInConfigration = (array, parameter) => { 
+    return array.find(element => {
         if(element.parameter === parameter) {
             return element;
         }
     });
+};
 
 class App extends Component  {
     constructor(props) {
@@ -92,8 +94,8 @@ class App extends Component  {
                     <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
                 </Grid>
                 <Grid item xs={6}>
-                    { `Main Audiowall - ${this.state.mainAudiowall}` }
-                    { `User Audiowall - ${this.state.userAudiowall}` }
+                    <Audiowall id={this.state.mainAudiowall} />
+                    <Audiowall id={this.state.userAudiowall} />
                 </Grid>
             </StyledApp>
         );
