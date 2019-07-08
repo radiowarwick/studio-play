@@ -32,7 +32,7 @@ class App extends Component  {
             
             console.log(payload);
             
-            if(channel == 't_configuration') {
+            if(channel === 't_configuration') {
                 const { parameter:type, val, location } = payload;
                 if(location === process.env.REACT_APP_STUDIO_LOCATION) {
                     if(type === 'next_on_showplan') {
