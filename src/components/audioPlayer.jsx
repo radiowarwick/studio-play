@@ -14,9 +14,10 @@ import { withStyles } from '@material-ui/styles';
 
 const StyledPlayer = withStyles({
     root: {
-        background: '#eee',
+        background: '#454444',
         padding: '2em',
         margin: '0.5em',
+        height: 'calc(100%/3 - 1em)',
     }
 })(Grid);
 
@@ -91,6 +92,7 @@ class AudioPlayer extends Component {
             this.setState({
                 md5: this.props.nextMD5,
                 audio: data,
+                status: 'initialized',
             });
             console.log(data);
         });
@@ -151,15 +153,15 @@ class AudioPlayer extends Component {
                 
                 
                 <Grid item xs={4}>
-                    <AudioPlayPause onClick={this.eventPlayPauseClick} />
+                    <AudioPlayPause onClick={this.eventPlayPauseClick} status={this.state.status} />
                 </Grid>
 
                 <Grid item xs={4}>
-                    <AudioStop onClick={this.eventStopClick} />
+                    <AudioStop onClick={this.eventStopClick} disabled={this.state.status === 'initialized'} />
                 </Grid>
 
                 <Grid item xs={4}>
-                    <AudioLoad enabled={canLoad} onClick={this.eventLoadClick} />
+                    <AudioLoad disabled={!canLoad} onClick={this.eventLoadClick} />
                 </Grid>
 
                 <Grid item xs={12}>

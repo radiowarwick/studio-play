@@ -10,8 +10,11 @@ import { withStyles } from '@material-ui/styles';
 const StyledApp = withStyles({
     root: {
         background: '#2b2b2b',
+        color: 'white',
+        height: '100vh',
+        borderRadius: 0,
     }
-})(Paper);
+})(Grid);
 
 class App extends Component  {
     constructor(props) {
@@ -48,13 +51,20 @@ class App extends Component  {
 
     render() {
         return (
-            <StyledApp>
-                <Grid container>
-                    <Grid item xs={5}>
-                        <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
-                        <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
-                        <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
-                    </Grid>
+            <StyledApp container>
+                <Grid
+                    container
+                    xs={6}
+                    direction="column"
+                    justify="center"
+                    alignItems="center"
+                    height="100%">
+                    <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
+                    <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
+                    <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
+                </Grid>
+                <Grid item xs={6}>
+                    {/* Two audio wall components to go here... */}
                 </Grid>
             </StyledApp>
         );

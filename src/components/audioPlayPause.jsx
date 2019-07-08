@@ -1,27 +1,18 @@
-import React, { Component } from 'react';
+import React from 'react';
+
 import Button from '@material-ui/core/Button';
+import PlayArrow from '@material-ui/icons/PlayArrow';
+import Pause from '@material-ui/icons/Pause';
 
-class AudioPlayPause extends Component {
-    constructor(props) {
-        super(props);
+export default function AudioPlayPause({ status, onClick }) {
+    const icon = (status === 'playing') ? <Pause /> : <PlayArrow />;
 
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-        this.props.onClick();
-    }
-
-    render() {
-        return (
-            <Button
-                variant="contained"
-                color="primary" 
-                onClick={this.handleClick}>
-                Play/Pause
-            </Button>
-        );
-    }
+    return (
+        <Button
+            variant="contained"
+            color="primary" 
+            onClick={onClick}>
+            { icon }
+        </Button>
+    );
 }
-
-export default AudioPlayPause;

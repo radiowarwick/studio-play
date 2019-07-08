@@ -1,27 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
+
 import Button from '@material-ui/core/Button';
+import Stop from '@material-ui/icons/Stop';
 
-class AudioStop extends Component {
-    constructor(props) {
-        super(props);
-
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-        this.props.onClick();
-    }
-
-    render() {
-        return (
-            <Button
-                variant="contained"
-                color="primary" 
-                onClick={this.handleClick}>
-                Stop
-            </Button>
-        );
-    }
+export default function AudioStop({ onClick, disabled }) {
+    return (
+        <Button
+            variant="contained"
+            color="secondary" 
+            onClick={onClick}
+            disabled={disabled ? disabled : false}>
+            <Stop />
+        </Button>
+    );
 }
-
-export default AudioStop;
