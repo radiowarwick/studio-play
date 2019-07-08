@@ -10,6 +10,15 @@ import AudioPlayerProgress from './audioPlayerProgress';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/styles';
+
+const StyledPlayer = withStyles({
+    root: {
+        background: '#eee',
+        padding: '2em',
+        margin: '0.5em',
+    }
+})(Grid);
 
 class AudioPlayer extends Component {
     constructor(props) {
@@ -104,7 +113,7 @@ class AudioPlayer extends Component {
         const canLoad = this.state.status !== 'playing' && this.props.nextMD5 !== this.state.md5 && this.props.nextMD5;
 
         return (
-            <Grid container spacing={3}>
+            <StyledPlayer container spacing={1}>
                 <Audio
                     audio={this.props.audio}
                     status={this.state.status}
@@ -118,17 +127,28 @@ class AudioPlayer extends Component {
                     time={this.state.time}
                     />
                 
-                <Grid item xs={12}>
-                    <Typography variant="h1">
+                <Grid item xs={5}>
+                    <Typography variant="h2">
                         <AudioPlayerTime 
                             status={this.state.status}
                             time={this.state.time}
                             audioLength={this.state.audioLength} />
                     </Typography>
                 </Grid>
+
+                <Grid item xs={7}>
+                    <Grid item xs>
+                        <Typography variant="h5" noWrap>
+                            Title: {this.state.audio ? this.state.audio.title : ''}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs>
+                        <Typography variant="h5" noWrap>
+                            Artist: {this.state.audio ? this.state.audio.artist : ''}
+                        </Typography>
+                    </Grid>
+                </Grid>
                 
-                <Grid item xs={6}>Title: {this.state.audio ? this.state.audio.title : ''}</Grid>
-                <Grid item xs={6}>Artist: {this.state.audio ? this.state.audio.artist : ''}</Grid>
                 
                 <Grid item xs={4}>
                     <AudioPlayPause onClick={this.eventPlayPauseClick} />
@@ -145,8 +165,7 @@ class AudioPlayer extends Component {
                 <Grid item xs={12}>
                     <AudioPlayerProgress audioLength={this.state.audioLength} time={this.state.time} status={this.state.status} onChange={this.eventAudioTimeChange} />
                 </Grid>
-
-            </Grid>
+            </StyledPlayer>
         );
     }
 }

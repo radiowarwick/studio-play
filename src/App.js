@@ -4,6 +4,14 @@ import './App.css';
 import AudioPlayer from './components/audioPlayer';
 
 import Grid from '@material-ui/core/Grid';
+import Paper  from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/styles';
+
+const StyledApp = withStyles({
+    root: {
+        background: '#2b2b2b',
+    }
+})(Paper);
 
 class App extends Component  {
     constructor(props) {
@@ -40,15 +48,15 @@ class App extends Component  {
 
     render() {
         return (
-            <div>
+            <StyledApp>
                 <Grid container>
-                    <Grid item xs={6}>
+                    <Grid item xs={5}>
                         <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
                         <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
                         <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
                     </Grid>
                 </Grid>
-            </div>
+            </StyledApp>
         );
     };
 }
