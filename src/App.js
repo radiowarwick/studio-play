@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 import AudioPlayer from './components/audioPlayer';
 
@@ -14,14 +15,26 @@ const StyledApp = withStyles({
     }
 })(Grid);
 
+// Given an array of configuration objects, and a parameter string as input
+// Return the configration where it's parameter matches the search string
+const findInConfigration = (array, parameter) => 
+    array.find(element => {
+        if(element.parameter === parameter) {
+            return element;
+        }
+    });
+
 class App extends Component  {
     constructor(props) {
         super(props);
+        
         this.audio = new AudioContext();
         this.audio.destination.channelInterpretation = 'discrete';
         
         this.state = {
             md5: 0,
+            mainAudiowall: null,
+            userAudiowall: null,
         };
     }
     
@@ -33,18 +46,35 @@ class App extends Component  {
             console.log(payload);
             
             if(channel === 't_configuration') {
-                const { parameter:type, val, location } = payload;
+                const { parameter, val, location } = payload;
                 if(location === process.env.REACT_APP_STUDIO_LOCATION) {
-                    if(type === 'next_on_showplan') {
+                    if(parameter === 'next_on_showplan') {
                         this.setState({
                             md5: val,
+                        });
+                    }
+                    else if(parameter === 'station_aw_set') {
+                        this.setState({
+                            mainAudiowall: val,
+                        });
+                    }
+                    else if(parameter === 'user_aw_set') {
+                        this.setState({
+                            userAudiowall: val
                         });
                     }
                 }
             }
         };
 
-        this.setState(ws);
+        axios.get(`http://digiplay/api/configuration?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&location=${process.env.REACT_APP_STUDIO_LOCATION}`).then(({data}) => {
+            this.setState({
+                mainAudiowall: findInConfigration(data, 'station_aw_set').val,
+                userAudiowall: findInConfigration(data, 'user_aw_set').val,
+            });
+        });
+
+        this.setState({ws});
     }
 
     render() {
@@ -62,7 +92,8 @@ class App extends Component  {
                     <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
                 </Grid>
                 <Grid item xs={6}>
-                    {/* Two audio wall components to go here... */}
+                    { `Main Audiowall - ${this.state.mainAudiowall}` }
+                    { `User Audiowall - ${this.state.userAudiowall}` }
                 </Grid>
             </StyledApp>
         );
