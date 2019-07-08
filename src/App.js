@@ -4,7 +4,6 @@ import './App.css';
 import AudioPlayer from './components/audioPlayer';
 
 import Grid from '@material-ui/core/Grid';
-import Paper  from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/styles';
 
 const StyledApp = withStyles({
