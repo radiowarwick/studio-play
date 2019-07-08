@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 
 import AudioPlayer from './components/audioPlayer';
 
