@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import Audio from './audio';
+import AudioRunner from './audio';
 import AudioPlayPause from './audioPlayPause';
 import AudioStop from './audioStop';
 import AudioPlayerTime from './audioPlayerTime';
@@ -122,8 +122,8 @@ class AudioPlayer extends Component {
 
         return (
             <StyledPlayer container spacing={1}>
-                <Audio
-                    audio={this.props.audio}
+                <AudioRunner
+                    audioContext={this.props.audio}
                     status={this.state.status}
                     audioResource={this.state.audio ? this.state.audio.resource : null}
                     leftChannel={this.props.leftChannel}
