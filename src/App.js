@@ -94,8 +94,18 @@ class App extends Component  {
                     <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
                 </Grid>
                 <Grid item xs={6}>
-                    <Audiowall id={this.state.mainAudiowall} />
-                    <Audiowall id={this.state.userAudiowall} />
+                    <Audiowall
+                        id={this.state.mainAudiowall}
+                        audio={this.audio}
+                        leftChannel={0}
+                        rightChannel={1}
+                    />
+                    <Audiowall
+                        id={this.state.userAudiowall}
+                        audio={this.audio}
+                        leftChannel={0}
+                        rightChannel={1}
+                    />
                 </Grid>
             </StyledApp>
         );

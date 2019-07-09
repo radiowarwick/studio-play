@@ -127,7 +127,7 @@ class AudioPlayer extends Component {
                     eventTick={this.eventAudioTick}
                     updateAudioLength={this.updateAudioLength}
                     time={this.state.time}
-                    />
+                />
                 
                 <Grid item xs={5}>
                     <Typography variant="h2">

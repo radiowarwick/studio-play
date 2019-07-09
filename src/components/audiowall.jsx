@@ -56,7 +56,12 @@ class Audiowall extends Component {
                 <div>
                     <h1>{this.state.walls[this.state.currentWall].name}</h1>
             
-                    <AudiowallWall wall={this.state.walls[this.state.currentWall]} />
+                    <AudiowallWall
+                        wall={this.state.walls[this.state.currentWall]}
+                        audio={this.props.audio}
+                        leftChannel={this.props.leftChannel}
+                        rightChannel={this.props.rightChannel}
+                    />
 
                     <Button variant="contained" color="primary" onClick={this.previousWall}>Prev</Button>
                     <Button variant="contained" color="primary" onClick={this.nextWall}>Next</Button>

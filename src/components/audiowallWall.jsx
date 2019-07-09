@@ -22,7 +22,15 @@ class AudiowallWall extends Component {
             // If item is not null, and the items location matches our i, add it to render it
             if(item && item.item === i) {
                 seen++;
-                itemArray.push(<AudiowallItem item={item} key={i} />);
+                itemArray.push(
+                    <AudiowallItem
+                        audio={this.props.audio}
+                        leftChannel={this.props.leftChannel}
+                        rightChannel={this.props.rightChannel}
+                        item={item}
+                        key={i}
+                    />
+                );
             }
             // If our i doesn't match our current seen index, add a null item
             else {
