@@ -41,10 +41,6 @@ class Audio extends Component {
         this.mergerNode = audio.createChannelMerger(audio.destination.channelCount);
         this.splitterNode = audio.createChannelSplitter(2);
         this.silent = audio.createBufferSource();
-        this.src = audio.createBufferSource();
-        
-        // Connect our audio to be split into channels
-        this.src.connect(this.splitterNode);
         
         // Split our source to our speicified left and right channel
         this.splitterNode.connect(this.mergerNode, 0, this.props.leftChannel);
@@ -60,7 +56,7 @@ class Audio extends Component {
         // Connect to our destination
         this.mergerNode.connect(audio.destination);
 
-        if(!this.state.loaded && this.props.audioResource && this.props.status !== 'initialized') {
+        if(!this.state.loaded && this.props.audioResource/* && this.props.status !== 'initialized'*/) {
             this.load();
         }
 
@@ -74,54 +70,66 @@ class Audio extends Component {
         clearInterval(this.state.tickID);
     }
     
-    async load() {
-        const { audio } = this.props;
+    load() {
+        const { audio, audioResource } = this.props;
 
-        let response = await axios.get(this.props.audioResource, {
+        // Fetch the data that we need
+        axios.get(audioResource, {
             responseType: 'arraybuffer',
-        });
-        this.audioBuffer = await audio.decodeAudioData(response.data);
-        this.src.buffer = this.audioBuffer;
-        
-        const length = Math.round((this.audioBuffer.length / this.audioBuffer.sampleRate) * 1000);
-        this.props.updateAudioLength(length);
-        
-        this.setState({
-            loaded: true,
-            time: 0,
-        });
+        }).then(response => {
+            const { data } = response;
 
-        this.props.eventLoaded();
+            console.time('decode');
+
+            // Decode our audio file
+            audio.decodeAudioData(data).then(decodedData => {
+                console.timeEnd('decode');
+                
+                // Set it in the buffer to be used in the source node
+                this.audioBuffer = decodedData;
+
+                // Find length and pass up the data
+                const length = Math.round((decodedData.length / decodedData.sampleRate) * 1000);
+                this.props.updateAudioLength(length);
+    
+                // Set time to 0 and say we've loaded
+                this.setState({
+                    loaded: true,
+                    time: 0,
+                });
+    
+                // Pass up loaded message
+                this.props.eventLoaded();
+            });
+        });
     }
     
-    async play() {
+    play() {
         console.log(`Playing from ${this.state.time}ms`);
 
         let { audio } = this.props;
 
-        // Load the audio if none is currently loaded
-        if(!this.state.loaded) {
-            await this.load();
+        // Only play if loaded
+        if(this.state.loaded) {
+            // A source is one-use only
+            // So we need to make a new one for each play
+            this.src = audio.createBufferSource();
+            this.src.buffer = this.audioBuffer;
+            // Connect it to the splitter node, this then connects through to output
+            this.src.connect(this.splitterNode);
+            // Add event listener for ended
+            // this.src.onended = this.props.eventEnded;
+    
+            // If we have a prop time, use that as the overrided time 
+            const playTime = this.props.time ? this.props.time : this.state.time;
+            
+            // Convert time to seconds and play with that offset
+            this.src.start(0, playTime / 1000);
+    
+            // Sets a 'relative' start timestamp
+            const startTimestamp = new Date().getTime() - playTime;
+            this.setState({startTimestamp});
         }
-        
-        // A source is one-use only
-        // So we need to make a new one for each play
-        this.src = audio.createBufferSource();
-        this.src.buffer = this.audioBuffer;
-        // Connect it to the splitter node, this then connects through to output
-        this.src.connect(this.splitterNode);
-        // Add event listener for ended
-        // this.src.onended = this.props.eventEnded;
-
-        // If we have a prop time, use that as the overrided time 
-        const playTime = this.props.time ? this.props.time : this.state.time;
-        
-        // Convert time to seconds and play with that offset
-        this.src.start(0, playTime / 1000);
-
-        // Sets a 'relative' start timestamp
-        const startTimestamp = new Date().getTime() - playTime;
-        this.setState({startTimestamp});
     }
 
     // Stop the currently playing audio source

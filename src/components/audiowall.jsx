@@ -52,16 +52,23 @@ class Audiowall extends Component {
 
     render() {
         if(this.props.id !== 0 && this.state.loaded) {
-            return (
-                <div>
-                    <h1>{this.state.walls[this.state.currentWall].name}</h1>
-            
+            const walls = this.state.walls.map((wall, index) => {
+                return (
                     <AudiowallWall
-                        wall={this.state.walls[this.state.currentWall]}
+                        wall={wall}
+                        key={index}
                         audio={this.props.audio}
                         leftChannel={this.props.leftChannel}
                         rightChannel={this.props.rightChannel}
                     />
+                );
+            });
+
+            return (
+                <div>
+                    <h1>{this.state.walls[this.state.currentWall].name}</h1>
+            
+                    {walls}
 
                     <Button variant="contained" color="primary" onClick={this.previousWall}>Prev</Button>
                     <Button variant="contained" color="primary" onClick={this.nextWall}>Next</Button>

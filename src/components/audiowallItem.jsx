@@ -24,6 +24,7 @@ class AudiowallItem extends Component {
         this.eventAudioLoaded = this.eventAudioLoaded.bind(this);
         this.eventAudioTick = this.eventAudioTick.bind(this);
         this.updateAudioLength = this.updateAudioLength.bind(this);
+        this.eventPlayStop = this.eventPlayStop.bind(this);
 
         this.state = {
             status: 'initialized',
@@ -46,6 +47,23 @@ class AudiowallItem extends Component {
         this.setState({length});
     }
 
+    eventPlayStop() {
+        let { status } = this.state;
+        
+        console.log(status);
+
+        if(status !== 'initialized') {
+            if(status === 'playing') {
+                status = 'stopped';
+            }
+            else if(status === 'stopped') {
+                status = 'playing';
+            }
+        }
+
+        this.setState({status});
+    }
+
     render() {
         const { item } = this.props;
         
@@ -64,15 +82,16 @@ class AudiowallItem extends Component {
         }
         
         if(item) {
-
-            
-
             const audioResource = null;
             // const audioResource = `http://digiplay/api/audio/download?id=${item.audio_id}&key=${process.env.REACT_APP_DIGIPLAY_API_KEY}`;
+            // const audioResource = `http://digiplay/api/audio/download?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&id=76467`;
 
             return (
                 <Grid item xs={4}>
-                    <StyledPaper style={style}>
+                    <StyledPaper
+                        style={style}
+                        onClick={this.eventPlayStop}
+                    >
                         <Audio
                             audio={this.props.audio}
                             leftChannel={this.props.leftChannel}
@@ -82,6 +101,7 @@ class AudiowallItem extends Component {
                             eventEnded={this.eventAudioEnded}
                             eventTick={this.eventAudioTick}
                             updateAudioLength={this.updateAudioLength}
+                            status={this.state.status}
                         />
 
                         <Typography variant="h6" align="center" noWrap>
