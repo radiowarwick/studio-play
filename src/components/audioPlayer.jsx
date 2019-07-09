@@ -100,6 +100,12 @@ class AudioPlayer extends Component {
 
     eventAudioTick(time) {
         this.setState({time});
+
+        if(time > this.state.audioLength) {
+            this.setState({
+                status: 'stopped',
+            });
+        }
     }
 
     eventAudioTimeChange(time) {

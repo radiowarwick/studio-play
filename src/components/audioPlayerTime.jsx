@@ -28,8 +28,17 @@ class AudioPlayerTime extends Component {
             time = this.props.audioLength-this.props.time;
         }
 
+        let negative = false;
+        if(time < 0) {
+            negative = true;
+            time = -time;
+        }
+
         return (
-            <span>{this.formatTime(time)}</span>
+            <span>
+                {negative ? '-' : ''}
+                {this.formatTime(time)}
+            </span>
         );
     }
 }
