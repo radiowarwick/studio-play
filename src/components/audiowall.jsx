@@ -77,8 +77,8 @@ class Audiowall extends Component {
             
                     {walls}
 
-                    <Button variant="contained" color="primary" onClick={this.previousWall}>Prev</Button>
-                    <Button variant="contained" color="primary" onClick={this.nextWall}>Next</Button>
+                    <Button variant="contained" color="primary" onClick={this.previousWall} disabled={this.state.currentWall <= 0}>Prev</Button>
+                    <Button variant="contained" color="primary" onClick={this.nextWall} disabled={this.state.currentWall + 1 === this.state.walls.length}>Next</Button>
                 </div>
             );
         }
