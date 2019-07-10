@@ -58,7 +58,7 @@ class AudioPlayer extends Component {
     eventStopClick() {
         if(this.state.status !== 'loading') {
             this.setState({
-                startTime: 0,
+                time: 0,
                 status: 'stopped',
             });
         }
