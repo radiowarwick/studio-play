@@ -53,15 +53,21 @@ class Audiowall extends Component {
     render() {
         if(this.props.id !== 0 && this.state.loaded) {
             const walls = this.state.walls.map((wall, index) => {
+                const style = {
+                    display: index === this.state.currentWall ? 'inherit' : 'none',
+                };
+
                 return (
-                    <AudiowallWall
-                        wall={wall}
-                        key={index}
-                        audioContext={this.props.audioContext}
-                        mergerNode={this.props.mergerNode}
-                        leftChannel={this.props.leftChannel}
-                        rightChannel={this.props.rightChannel}
-                    />
+                    <div style={style}>
+                        <AudiowallWall
+                            wall={wall}
+                            key={index}
+                            audioContext={this.props.audioContext}
+                            mergerNode={this.props.mergerNode}
+                            leftChannel={this.props.leftChannel}
+                            rightChannel={this.props.rightChannel}
+                        />
+                    </div>
                 );
             });
 
