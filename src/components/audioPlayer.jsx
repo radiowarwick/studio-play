@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import AudioRunner from './audio';
+import AudioRunner from './audioRunner';
 import AudioPlayPause from './audioPlayPause';
 import AudioStop from './audioStop';
 import AudioPlayerTime from './audioPlayerTime';
@@ -31,7 +31,7 @@ class AudioPlayer extends Component {
         this.eventAudioLoaded = this.eventAudioLoaded.bind(this);
         this.eventAudioEnded = this.eventAudioEnded.bind(this);
         this.eventLoadClick = this.eventLoadClick.bind(this);
-        this.eventAudioTick = this.eventAudioTick.bind(this);
+        this.eventAudioTimeUpdate = this.eventAudioTimeUpdate.bind(this);
         this.eventAudioTimeChange = this.eventAudioTimeChange.bind(this);
 
         this.state = {
@@ -98,17 +98,11 @@ class AudioPlayer extends Component {
         });
     }
 
-    eventAudioTick(time) {
+    eventAudioTimeChange(time) {
         this.setState({time});
-
-        if(time > this.state.audioLength) {
-            this.setState({
-                status: 'stopped',
-            });
-        }
     }
 
-    eventAudioTimeChange(time) {
+    eventAudioTimeUpdate(time) {
         this.setState({time});
     }
 
@@ -130,7 +124,7 @@ class AudioPlayer extends Component {
                     rightChannel={this.props.rightChannel}
                     eventLoaded={this.eventAudioLoaded}
                     eventEnded={this.eventAudioEnded}
-                    eventTick={this.eventAudioTick}
+                    eventTimeUpdate={this.eventAudioTimeUpdate}
                     updateAudioLength={this.updateAudioLength}
                     time={this.state.time}
                 />

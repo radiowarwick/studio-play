@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
 class AudioRunner extends Component {
     constructor(props) {
         super(props);
         
-        this.tick = this.tick.bind(this);
         this.load = this.load.bind(this);
         this.play = this.play.bind(this);
 
         this.state = {
             loaded: false,
         };
-
     }
 
     async componentDidUpdate(prevProps) {
@@ -32,7 +29,7 @@ class AudioRunner extends Component {
             this.setState({
                 loaded: false,
             });
-            // this.load();
+            this.load();
         }
     }
 
@@ -58,9 +55,11 @@ class AudioRunner extends Component {
         // Connect to our destination
         this.mergerNode.connect(audioContext.destination);
 
-        // Start our tick
-        // const tickID = setInterval(this.tick, 10);
-        // this.setState({tickID});
+        // If we have an audio resource when we mount
+        // Immediately load it 
+        if(this.props.audioResource) {
+            this.load();
+        }
     }
 
     componentWillUnmount() {
@@ -76,10 +75,9 @@ class AudioRunner extends Component {
         this.audio.crossOrigin = 'anonymous';
         this.audio.preload = 'metadata';
 
-        this.audio.onloadedmetadata = () => {
-            this.props.updateAudioLength(this.audio.duration*1000);
-        }
-        
+        this.audio.addEventListener('loadedmetadata', () => this.props.updateAudioLength(this.audio.duration*1000));
+        this.audio.addEventListener('timeupdate', () => this.props.eventTimeUpdate(this.audio.currentTime*1000));
+
         // Create WebAudio source and connect it into our system
         this.src = audioContext.createMediaElementSource(this.audio);
         this.src.connect(this.splitterNode);
@@ -93,42 +91,33 @@ class AudioRunner extends Component {
     }
     
     play() {
-        console.log(`Playing now`);
+        // If play is clicked and we haven't loaded
+        // Then load the song in
         if(!this.state.loaded) {
             this.load();
         }
 
+        // If an override time is given (from seeking) then use that as play time
+        if(this.props.time && this.audio.currentTime*1000 !== this.props.time) {
+            this.audio.currentTime = this.props.time / 1000;
+        }
+
+        // Play the audio element
         this.audio.play();
     }
 
     // Stop the currently playing audio source
     // Return the playtime when the pause happened
     stop() {
-        this.audio.pause();
-        this.audio.currentTime = 0;
+        if(this.state.loaded) {
+            this.audio.pause();
+            this.audio.currentTime = 0;
+        }
     }
 
     pause() {
-        this.audio.pause();
-    }
-
-    tick() {
-        const { time:originalTime } = this.state;
-        let { time } = this.state;
-
-        if(this.props.status === 'playing') {
-            // Whilst playing keep updating time
-            time = new Date().getTime() - this.state.startTimestamp;
-        }
-        else if(this.props.status === 'stopped') {
-            // We're stopped so set time to 0
-            time = 0;
-        }
-        
-        // We only update the state and notify the parent if play time changes
-        if(originalTime !== time) {
-            this.setState({time});
-            this.props.eventTick(time);
+        if(this.state.loaded) {
+            this.audio.pause();
         }
     }
 

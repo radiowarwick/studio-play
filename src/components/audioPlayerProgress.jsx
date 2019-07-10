@@ -52,9 +52,9 @@ class AudioPlayerProgress extends Component {
 
     componentDidUpdate(prevProps) {
         if(this.props.time !== prevProps.time) {
-            // this.setState({
-            //     time: this.props.time,
-            // });
+            this.setState({
+                time: this.props.time,
+            });
         }
     }
 

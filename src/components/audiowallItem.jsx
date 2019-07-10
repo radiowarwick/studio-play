@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
-import AudioRunner from './audio';
+import AudioRunner from './audioRunner';
 import AudioPlayerTime from './audioPlayerTime';
 
 const StyledPaper = withStyles({
@@ -22,7 +22,7 @@ class AudiowallItem extends Component {
         super(props);
 
         this.eventAudioLoaded = this.eventAudioLoaded.bind(this);
-        this.eventAudioTick = this.eventAudioTick.bind(this);
+        this.eventAudioTimeUpdate = this.eventAudioTimeUpdate.bind(this);
         this.updateAudioLength = this.updateAudioLength.bind(this);
         this.eventPlayStop = this.eventPlayStop.bind(this);
 
@@ -39,7 +39,7 @@ class AudiowallItem extends Component {
         // });
     }
 
-    eventAudioTick(time) {
+    eventAudioTimeUpdate(time) {
         this.setState({time});
     }
 
@@ -95,7 +95,7 @@ class AudiowallItem extends Component {
                             audioResource={audioResource}
                             eventLoaded={this.eventAudioLoaded}
                             eventEnded={this.eventAudioEnded}
-                            eventTick={this.eventAudioTick}
+                            eventTimeUpdate={this.eventAudioTimeUpdate}
                             updateAudioLength={this.updateAudioLength}
                             status={this.state.status}
                         />
