@@ -24,7 +24,8 @@ class AudiowallWall extends Component {
                 seen++;
                 itemArray.push(
                     <AudiowallItem
-                        audio={this.props.audio}
+                        audioContext={this.props.audioContext}
+                        mergerNode={this.props.mergerNode}
                         leftChannel={this.props.leftChannel}
                         rightChannel={this.props.rightChannel}
                         item={item}

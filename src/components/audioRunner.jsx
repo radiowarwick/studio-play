@@ -34,37 +34,28 @@ class AudioRunner extends Component {
     }
 
     componentDidMount() {
-        const { audioContext } = this.props;
-        
-        // Create all the nodes that we need
-        this.mergerNode = audioContext.createChannelMerger(audioContext.destination.channelCount);
-        this.splitterNode = audioContext.createChannelSplitter(2);
-        this.silent = audioContext.createBufferSource();
-        
-        // Split our source to our speicified left and right channel
-        this.splitterNode.connect(this.mergerNode, 0, this.props.leftChannel);
-        this.splitterNode.connect(this.mergerNode, 1, this.props.rightChannel);
-        
-        // Connect silence to all other channels
-        for(let i = 0; i < audioContext.destination.channelCount; i++) {
-            if(i !== this.props.leftChannel && i !== this.props.rightChannel) {
-                this.silent.connect(this.mergerNode, 0, i);
-            }
-        }
-        
-        // Connect to our destination
-        this.mergerNode.connect(audioContext.destination);
+        const { audioContext, mergerNode, audioResource } = this.props;
+        let { leftChannel, rightChannel } = this.props;
 
+        // If we are trying to use a channel which we don't have access to
+        // Then we'll just set left and right channels to 0 and 1 respectively
+        leftChannel = (leftChannel >= audioContext.destination.channelCount) ? 0 : leftChannel;
+        rightChannel = (rightChannel >= audioContext.destination.channelCount) ? 1 : rightChannel;
+
+        // Create the node to split our source into left and right
+        this.splitterNode = audioContext.createChannelSplitter(2);
+        
+        // Take the left and right channel of the splitter
+        // Then connect them to the appropraite inputs (left/right channels)
+        // of the merger node
+        this.splitterNode.connect(mergerNode, 0, leftChannel);
+        this.splitterNode.connect(mergerNode, 1, rightChannel);
+        
         // If we have an audio resource when we mount
         // Immediately load it 
-        if(this.props.audioResource) {
+        if(audioResource) {
             this.load();
         }
-    }
-
-    componentWillUnmount() {
-        // Stop the tick
-        clearInterval(this.state.tickID);
     }
     
     load() {
@@ -75,7 +66,9 @@ class AudioRunner extends Component {
         this.audio.crossOrigin = 'anonymous';
         this.audio.preload = 'metadata';
 
+        // Inform the parent of the length when we know it
         this.audio.addEventListener('loadedmetadata', () => this.props.updateAudioLength(this.audio.duration*1000));
+        // Inform the parent of current time when it changes
         this.audio.addEventListener('timeupdate', () => this.props.eventTimeUpdate(this.audio.currentTime*1000));
 
         // Create WebAudio source and connect it into our system

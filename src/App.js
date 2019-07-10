@@ -30,9 +30,16 @@ class App extends Component  {
     constructor(props) {
         super(props);
         
-        this.audio = new AudioContext();
-        this.audio.destination.channelInterpretation = 'discrete';
-        
+        // Setup audio
+        this.audioContext = new AudioContext();
+        this.audioContext.destination.channelInterpretation = 'discrete';
+        this.audioContext.destination.channelCount = this.audioContext.destination.maxChannelCount;
+
+        // Create our merger node (with same channels as output)
+        // Connect the merger to our destination (the real output)
+        this.mergerNode = this.audioContext.createChannelMerger(this.audioContext.destination.channelCount);
+        this.mergerNode.connect(this.audioContext.destination);
+
         this.state = {
             md5: 0,
             mainAudiowall: null,
@@ -42,7 +49,7 @@ class App extends Component  {
     
     componentDidMount() {
         const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET);
-        ws.onmessage = ({data}) => {
+        ws.addEventListener('message', ({data}) => {
             const { channel, payload } = JSON.parse(data);
             
             console.log(payload);
@@ -67,7 +74,7 @@ class App extends Component  {
                     }
                 }
             }
-        };
+        });
 
         axios.get(`http://digiplay/api/configuration?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&location=${process.env.REACT_APP_STUDIO_LOCATION}`).then(({data}) => {
             this.setState({
@@ -88,21 +95,45 @@ class App extends Component  {
                     direction="column"
                     justify="center"
                     alignItems="center"
-                    height="100%">
-                    <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
-                    <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
-                    <AudioPlayer nextMD5={this.state.md5} audio={this.audio} leftChannel={0} rightChannel={1} />
+                    height="100%"
+                >
+
+                    <AudioPlayer
+                        nextMD5={this.state.md5}
+                        audioContext={this.audioContext}
+                        mergerNode={this.mergerNode}
+                        leftChannel={0}
+                        rightChannel={1}
+                    />
+
+                    <AudioPlayer
+                        nextMD5={this.state.md5}
+                        audioContext={this.audioContext}
+                        mergerNode={this.mergerNode}
+                        leftChannel={2}
+                        rightChannel={3}
+                    />
+
+                    <AudioPlayer
+                        nextMD5={this.state.md5}
+                        audioContext={this.audioContext}
+                        mergerNode={this.mergerNode}
+                        leftChannel={4}
+                        rightChannel={5}
+                    />
                 </Grid>
                 <Grid item xs={6}>
                     <Audiowall
                         id={this.state.mainAudiowall}
-                        audio={this.audio}
+                        audioContext={this.audioContext}
+                        mergerNode={this.mergerNode}
                         leftChannel={0}
                         rightChannel={1}
-                    />
+                        />
                     <Audiowall
                         id={this.state.userAudiowall}
-                        audio={this.audio}
+                        audioContext={this.audioContext}
+                        mergerNode={this.mergerNode}
                         leftChannel={0}
                         rightChannel={1}
                     />

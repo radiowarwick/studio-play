@@ -57,7 +57,8 @@ class Audiowall extends Component {
                     <AudiowallWall
                         wall={wall}
                         key={index}
-                        audio={this.props.audio}
+                        audioContext={this.props.audioContext}
+                        mergerNode={this.props.mergerNode}
                         leftChannel={this.props.leftChannel}
                         rightChannel={this.props.rightChannel}
                     />

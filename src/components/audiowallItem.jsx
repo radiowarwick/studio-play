@@ -89,7 +89,8 @@ class AudiowallItem extends Component {
                         onClick={this.eventPlayStop}
                     >
                         <AudioRunner
-                            audioContext={this.props.audio}
+                            audioContext={this.props.audioContext}
+                            mergerNode={this.props.mergerNode}
                             leftChannel={this.props.leftChannel}
                             rightChannel={this.props.rightChannel}
                             audioResource={audioResource}

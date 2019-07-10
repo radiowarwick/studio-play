@@ -43,20 +43,16 @@ class AudioPlayer extends Component {
     }
 
     eventPlayPauseClick() {
-        const { status } = this.state;
-        let newStatus;
+        let { status } = this.state;
 
         if(status === 'stopped' || status  === 'paused') {
-            newStatus = 'playing';
+            status = 'playing';
         }
         else if(status === 'playing') {
-            newStatus = 'paused';
+            status = 'paused';
         }
 
-        this.setState({
-            status: newStatus,
-            // overrideTime: null,
-        });
+        this.setState({status});
     }
 
     eventStopClick() {
@@ -117,7 +113,8 @@ class AudioPlayer extends Component {
         return (
             <StyledPlayer container spacing={1}>
                 <AudioRunner
-                    audioContext={this.props.audio}
+                    audioContext={this.props.audioContext}
+                    mergerNode={this.props.mergerNode}
                     status={this.state.status}
                     audioResource={this.state.audio ? this.state.audio.resource : null}
                     leftChannel={this.props.leftChannel}
@@ -151,6 +148,9 @@ class AudioPlayer extends Component {
                     </Grid>
                 </Grid>
                 
+                <Grid item xs={12}>
+                    <AudioPlayerProgress audioLength={this.state.audioLength} time={this.state.time} status={this.state.status} onChange={this.eventAudioTimeChange} />
+                </Grid>
                 
                 <Grid item xs={4}>
                     <AudioPlayPause onClick={this.eventPlayPauseClick} status={this.state.status} />
@@ -162,10 +162,6 @@ class AudioPlayer extends Component {
 
                 <Grid item xs={4}>
                     <AudioLoad disabled={!canLoad} onClick={this.eventLoadClick} />
-                </Grid>
-
-                <Grid item xs={12}>
-                    <AudioPlayerProgress audioLength={this.state.audioLength} time={this.state.time} status={this.state.status} onChange={this.eventAudioTimeChange} />
                 </Grid>
             </StyledPlayer>
         );
