@@ -13,7 +13,6 @@ const StyledPaper = withStyles({
         height: 'calc(100vh/12)',
         color: 'white',
         background: '#428bca',
-        width: '100%',
     },
 })(Paper);
 
