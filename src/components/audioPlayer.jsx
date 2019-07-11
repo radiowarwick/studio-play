@@ -80,6 +80,7 @@ class AudioPlayer extends Component {
     eventAudioEnded() {
         this.setState({
             status: 'stopped',
+            time: 0,
         });
     }
 

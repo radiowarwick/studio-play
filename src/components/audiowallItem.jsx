@@ -10,7 +10,7 @@ import AudioPlayerTime from './audioPlayerTime';
 const StyledPaper = withStyles({
     root: {
         borderRadius: 5,
-        height: 100,
+        height: 'calc(100vh/12)',
         color: 'white',
         background: '#428bca',
         width: '100%',

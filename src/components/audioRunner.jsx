@@ -70,6 +70,8 @@ class AudioRunner extends Component {
         this.audio.addEventListener('loadedmetadata', () => this.props.updateAudioLength(this.audio.duration*1000));
         // Inform the parent of current time when it changes
         this.audio.addEventListener('timeupdate', () => this.props.eventTimeUpdate(this.audio.currentTime*1000));
+        // Inform the parent when the end of the track is reached
+        this.audio.addEventListener('ended', () => this.props.eventEnded());
 
         // Create WebAudio source and connect it into our system
         this.src = audioContext.createMediaElementSource(this.audio);

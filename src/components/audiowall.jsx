@@ -4,6 +4,7 @@ import axios from 'axios';
 import AudiowallWall from './audiowallWall';
 
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 class Audiowall extends Component {
     constructor(props) {
@@ -73,7 +74,9 @@ class Audiowall extends Component {
 
             return (
                 <div>
-                    <h1>{this.state.walls[this.state.currentWall].name}</h1>
+                    <Typography variant="h5">
+                        {this.state.walls[this.state.currentWall].name}
+                    </Typography>
             
                     {walls}
 
