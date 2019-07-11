@@ -1,13 +1,32 @@
 # RAW Studio Play V2
 
+RAW Studio Play is a rework of [Digiplay Legacy](https://github.com/radiowarwick/digiplay_legacy). This is written using React and makes use of the Digiplay API to provide a system which is highly portable to improve the ease of running full studio outside broadcasts.
+
+The rewrite makes use of the WebAudio API to provide distinct outputs to soundcard channels allowing the isolation of the players and audiowall.
+
 ## Installation/Setup
 
-In the project root run `cp .env.example .env.development.local` to create your own local development environment.<br>
-In `.env.development.local` edit the key `REACT_APP_DIGIPLAY_API_KEY` and add your digiplay api key.
+To run your own development environment do the following.
+```
+# Clone the repo
+$ git clone https://github.com/radiowarwick/studio-play.git
 
-Then do your normal react install with `npm install`. You should now be good to go!
+$ cd studio-play
 
-# Create React App default readme
+# Install dependencies
+$ npm install
+
+# Create and modify your own local environment file
+$ cp .env.example .env.development.local
+
+# Edit the file to add your own API key
+# Or add your local digiplay references
+
+# Run the server
+$ npm start
+```
+
+# Create React App default README
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

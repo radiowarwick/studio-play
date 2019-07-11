@@ -24,7 +24,7 @@ class Audiowall extends Component {
                 loaded: false,
             });
 
-            axios.get(`http://digiplay/api/audiowall?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&id=${this.props.id}`).then(({data}) => {
+            axios.get(`${process.env.REACT_APP_BASE_URL}/api/audiowall?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&id=${this.props.id}`).then(({data}) => {
                 console.log(data.name);
                 this.setState({
                     walls: data.walls,

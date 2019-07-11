@@ -104,7 +104,7 @@ class AudioPlayer extends Component {
     }
 
     async fetchData(md5) {
-        let response = await axios.get(`http://digiplay/api/audio/info?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&md5=${md5}`);
+        let response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/audio/info?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&md5=${md5}`);
         return response.data;
     }
 

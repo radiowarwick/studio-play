@@ -76,7 +76,7 @@ class App extends Component  {
             }
         });
 
-        axios.get(`http://digiplay/api/configuration?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&location=${process.env.REACT_APP_STUDIO_LOCATION}`).then(({data}) => {
+        axios.get(`${process.env.REACT_APP_BASE_URL}/api/configuration?key=${process.env.REACT_APP_DIGIPLAY_API_KEY}&location=${process.env.REACT_APP_STUDIO_LOCATION}`).then(({data}) => {
             this.setState({
                 mainAudiowall: findInConfigration(data, 'station_aw_set').val,
                 userAudiowall: findInConfigration(data, 'user_aw_set').val,
